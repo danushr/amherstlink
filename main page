@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmherstLink | Five-College Connection</title>
+    <style>
+        :root { --main-color: #800000; --text-color: #333; }
+        body { font-family: -apple-system, system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #fff; color: var(--text-color); }
+        .container { text-align: center; padding: 20px; animation: fadeIn 1.2s ease-in; }
+        h1 { font-size: 3rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; color: var(--main-color); }
+        p { font-size: 1.2rem; color: #666; margin-bottom: 30px; }
+        .btn { background: var(--main-color); color: white; padding: 15px 30px; text-decoration: none; border-radius: 50px; font-weight: 600; transition: transform 0.2s; display: inline-block; }
+        .btn:hover { transform: scale(1.05); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AmherstLink</h1>
+        <p>The social graph for the Five Colleges.<br>One match. No swiping. Just math.</p>
+        <a href="YOUR_GOOGLE_FORM_URL" class="btn">Enter the Experiment</a>
+    </div>
+</body>
+</html>

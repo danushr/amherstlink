@@ -19,31 +19,38 @@
     </div>
 
     <script>
-        async function fetchReadings() {
-            const contentDiv = document.getElementById('content');
-            try {
-                // Using the more reliable Liturgical Calendar API
-                const response = await fetch('https://litcal.johnromanodorazio.com/api/v5/calendar.php?returntype=JSON');
-                const data = await response.json();
-                
-                // This API returns an array for the year; we grab the entry for today
-                const today = new Date().toISOString().split('T')[0];
-                const readings = data.find(item => item.date === today);
-
-                if (readings) {
-                    contentDiv.innerHTML = `
-                        <h2>${readings.celebration[0].title}</h2>
-                        <p>Date: ${readings.date}</p>
-                    `;
-                } else {
-                    contentDiv.innerHTML = '<p>No readings found for today.</p>';
-                }
-            } catch (error) {
-                contentDiv.innerHTML = '<p>Error connecting to the calendar. Please try again later.</p>';
-                console.error("Fetch error:", error);
+    async function fetchReadings() {
+        const contentDiv = document.getElementById('content');
+        // Alternative reliable endpoint
+        const apiURL = 'https://litcal.johnromanodorazio.com/api/v5/calendar.php?returntype=JSON';
+        
+        try {
+            const response = await fetch(apiURL);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
+            const data = await response.json();
+            
+            // Logic to find today's date
+            const today = new Date().toISOString().split('T')[0];
+            const readings = data.find(item => item.date === today);
+
+            if (readings) {
+                contentDiv.innerHTML = `
+                    <h2>${readings.celebration[0].title}</h2>
+                    <p>Date: ${readings.date}</p>
+                `;
+            } else {
+                contentDiv.innerHTML = '<p>No data available for today.</p>';
+            }
+        } catch (error) {
+            contentDiv.innerHTML = `<p>Connection Error: ${error.message}. If you are on UMass Wi-Fi, try using your mobile data to see if the network is blocking the request.</p>`;
+            console.error("Fetch error:", error);
         }
-        fetchReadings();
-    </script>
+    }
+    fetchReadings();
+   </script>
 </body>
 </html>

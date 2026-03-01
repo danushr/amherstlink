@@ -18,39 +18,20 @@
         <div id="content">Loading today's readings...</div>
     </div>
 
-    <script>
-    async function fetchReadings() {
-        const contentDiv = document.getElementById('content');
-        // Alternative reliable endpoint
-        const apiURL = 'https://litcal.johnromanodorazio.com/api/v5/calendar.php?returntype=JSON';
-        
-        try {
-            const response = await fetch(apiURL);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            // Logic to find today's date
-            const today = new Date().toISOString().split('T')[0];
-            const readings = data.find(item => item.date === today);
-
-            if (readings) {
-                contentDiv.innerHTML = `
-                    <h2>${readings.celebration[0].title}</h2>
-                    <p>Date: ${readings.date}</p>
-                `;
-            } else {
-                contentDiv.innerHTML = '<p>No data available for today.</p>';
-            }
-        } catch (error) {
-            contentDiv.innerHTML = `<p>Connection Error: ${error.message}. If you are on UMass Wi-Fi, try using your mobile data to see if the network is blocking the request.</p>`;
-            console.error("Fetch error:", error);
-        }
-    }
-    fetchReadings();
-   </script>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Mass Readings</title>
+    <style>
+        body { margin: 0; padding: 0; height: 100vh; overflow: hidden; }
+        iframe { width: 100%; height: 100vh; border: none; }
+    </style>
+</head>
+<body>
+    <iframe src="https://bible.usccb.org/daily-bible-reading" title="Mass Readings"></iframe>
+</body>
+</html>
 </body>
 </html>

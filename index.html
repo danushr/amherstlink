@@ -40,10 +40,17 @@
         <div id="readings"></div>
     </div>
 
-    <script src="reading.js"></script>
     <script>
-        document.getElementById('title').innerText = dailyReading.title;
+    const script = document.createElement('script');
+    script.src = 'reading.js?t=' + new Date().getTime();
+    document.head.appendChild(script);
+</script>
+
+<script>
+    // Wait for the script to load before displaying content
+    script.onload = () => {
         document.getElementById('date').innerText = dailyReading.date;
+        document.getElementById('title').innerText = dailyReading.title;
         const container = document.getElementById('readings');
         
         for (const [key, value] of Object.entries(dailyReading.reading)) {
@@ -54,6 +61,7 @@
                     <div class="body-text">${value.body}</div>
                 </div>`;
         }
-    </script>
+    };
+</script>
 </body>
 </html>

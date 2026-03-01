@@ -2,31 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Mass Readings</title>
     <style>
-        body { font-family: 'Inter', sans-serif; background: #f8f7f4; display: flex; justify-content: center; padding: 60px 20px; }
-        .card { width: 100%; max-width: 600px; background: #fff; padding: 60px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 4px; }
-        h1 { color: #8c734b; font-family: serif; font-size: 2rem; }
+        :root { --bg: #fdfcf9; --text: #1a1a1a; --serif: 'Georgia', serif; }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 40px 20px; line-height: 1.6; }
+        .wrapper { max-width: 600px; margin: 0 auto; }
+        .date { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px; color: #999; margin-bottom: 20px; }
+        h1 { font-family: var(--serif); font-size: 2.5rem; margin-bottom: 40px; }
+        .section-header { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; color: #aaa; margin-top: 40px; margin-bottom: 10px; }
+        .text { font-family: var(--serif); font-size: 1.2rem; color: #333; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1 id="title">Loading...</h1>
-        <div id="content"></div>
+    <div class="wrapper">
+        <div class="date" id="date"></div>
+        <h1 id="title"></h1>
+        <div id="readings"></div>
     </div>
+    <script src="readings.js"></script>
     <script>
-        fetch('readings.json')
-            .then(res => res.json())
-            .then(data => {
-                const today = new Date().toISOString().split('T')[0];
-                const day = data.find(item => item.date === today);
-                if (day) {
-                    document.getElementById('title').innerText = day.celebration[0].title;
-                    document.getElementById('content').innerHTML = `<p>${day.celebration[0].rank}</p>`;
-                } else {
-                    document.getElementById('title').innerText = "No reading found for today.";
-                }
-            });
+        document.getElementById('date').innerText = dailyReadings.date;
+        document.getElementById('title').innerText = dailyReadings.title;
+        const container = document.getElementById('readings');
+        
+        for (const [key, value] of Object.entries(dailyReadings.content)) {
+            container.innerHTML += `<div class="section-header">${key}</div><div class="text">${value}</div>`;
+        }
     </script>
 </body>
 </html>

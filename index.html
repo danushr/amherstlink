@@ -3,34 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Mass Readings</title>
+    <title>Daily Mass</title>
     <style>
-        :root { --bg: #ffffff; --text: #121212; }
-        @media (prefers-color-scheme: dark) { :root { --bg: #121212; --text: #e0e0e0; } }
-        body { background: var(--bg); color: var(--text); font-family: 'Georgia', serif; line-height: 1.8; padding: 40px 20px; margin: 0; display: flex; justify-content: center; }
-        .container { max-width: 650px; width: 100%; }
-        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .date { font-size: 1rem; color: #777; margin-bottom: 3rem; }
-        .section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: #8c734b; margin-top: 40px; }
-        .body-text { font-size: 1.4rem; margin-bottom: 20px; }
+        body { 
+            margin: 0; 
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background-color: #ffffff; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            color: #1a1a1a; 
+        }
+        .container { text-align: center; max-width: 400px; padding: 20px; }
+        h1 { font-size: 1.5rem; font-weight: 300; margin-bottom: 2rem; letter-spacing: 1px; }
+        .button { 
+            display: inline-block; 
+            padding: 18px 36px; 
+            background-color: #1a1a1a; 
+            color: #ffffff; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-size: 0.9rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            transition: background 0.3s ease; 
+        }
+        .button:hover { background-color: #444; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>First Sunday of Lent</h1>
-        <div class="date">Sunday, March 1, 2026</div>
-
-        <div class="section-title">First Reading</div>
-        <div class="body-text">Genesis 9:8-15: "See, I am now establishing my covenant with you and your descendants after you..."</div>
-
-        <div class="section-title">Responsorial Psalm</div>
-        <div class="body-text">Psalm 25:4-9: "Your ways, O LORD, make known to me; teach me your paths."</div>
-
-        <div class="section-title">Second Reading</div>
-        <div class="body-text">1 Peter 3:18-22: "Christ suffered for sins once, the righteous for the sake of the unrighteous..."</div>
-
-        <div class="section-title">Gospel</div>
-        <div class="body-text">Mark 1:12-15: "The Spirit drove Jesus out into the desert..."</div>
+        <h1>Sunday, March 1, 2026</h1>
+        <a href="https://bible.usccb.org/daily-bible-reading" class="button">Read Today's Mass</a>
     </div>
 </body>
 </html>

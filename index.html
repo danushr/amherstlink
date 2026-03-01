@@ -6,36 +6,34 @@
     <title>Daily Mass Readings</title>
     <style>
         :root { --bg: #f8f7f4; --text: #2d2d2d; --accent: #8c734b; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; display: flex; justify-content: center; padding: 60px 20px; margin: 0; }
         .card { width: 100%; max-width: 650px; background: #fff; padding: 60px; border-radius: 4px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
         
-        h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 10px; color: var(--accent); }
+        h1 { font-family: serif; font-size: 2.2rem; margin-bottom: 5px; color: var(--accent); }
         .date { font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; color: #999; margin-bottom: 40px; }
         
-        .section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: #aaa; margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .reading-content { font-family: 'Merriweather', serif; font-size: 1.15rem; line-height: 1.8; color: #333; }
-        
-        .loading { font-style: italic; color: #888; text-align: center; margin-top: 50px; }
+        .reading-section { margin-top: 30px; }
+        .reading-section h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #aaa; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .content { font-family: serif; font-size: 1.15rem; line-height: 1.8; color: #333; }
     </style>
 </head>
 <body>
     <div class="card">
-        <div class="date" id="date"></div>
+        <div class="date" id="date">Loading...</div>
         <h1 id="title">Loading...</h1>
-        <div id="content" class="reading-content">
-            <p class="loading">Preparing the liturgy for today...</p>
+        <div id="content" class="content">
+            <p>Fetching today's liturgy...</p>
         </div>
     </div>
 
     <script>
-        async function fetchReadings() {
+        async function fetchNativeReadings() {
             const proxy = "https://corsproxy.io/?";
             const api = "https://litcal.johnromanodorazio.com/api/v5/calendar.php?returntype=JSON";
             
             try {
                 const response = await fetch(proxy + encodeURIComponent(api));
                 const data = await response.json();
-                
                 const today = new Date().toISOString().split('T')[0];
                 const day = data.find(item => item.date === today);
 
@@ -43,17 +41,21 @@
                     document.getElementById('date').innerText = day.date;
                     document.getElementById('title').innerText = day.celebration[0].title;
                     document.getElementById('content').innerHTML = `
-                        <div class="section-title">Liturgical Rank</div>
-                        <p>${day.celebration[0].rank}</p>
-                        <div class="section-title">Colors</div>
-                        <p>${day.celebration[0].colors.join(', ')}</p>
+                        <div class="reading-section">
+                            <h2>Liturgical Rank</h2>
+                            <p>${day.celebration[0].rank}</p>
+                        </div>
+                        <div class="reading-section">
+                            <h2>Liturgical Color</h2>
+                            <p>${day.celebration[0].colors.join(', ')}</p>
+                        </div>
                     `;
                 }
             } catch (err) {
-                document.getElementById('content').innerHTML = "Cannot connect to server. Please try a different network.";
+                document.getElementById('content').innerHTML = "Cannot connect to server. Check your network or try again later.";
             }
         }
-        fetchReadings();
+        fetchNativeReadings();
     </script>
 </body>
 </html>

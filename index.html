@@ -4,36 +4,50 @@
     <meta charset="UTF-8">
     <title>Daily Mass Readings</title>
     <style>
-        :root { --bg: #fcfcfc; --text: #1a1a1a; }
-        body { background: var(--bg); color: var(--text); font-family: 'Georgia', serif; line-height: 1.8; padding: 80px 20px; margin: 0; display: flex; justify-content: center; }
-        .card { max-width: 600px; width: 100%; }
-        .date { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; color: #999; margin-bottom: 20px; }
-        h1 { font-size: 3rem; margin-bottom: 50px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
-        .section { margin-top: 40px; }
-        .section-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: #aaa; margin-bottom: 10px; }
-        .section-text { font-size: 1.2rem; color: #444; }
+        body { font-family: 'Georgia', serif; background: #fcfcfc; color: #1a1a1a; line-height: 1.8; margin: 0; padding: 60px 20px; }
+        .card { max-width: 600px; margin: 0 auto; }
+        .date { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; color: #999; margin-bottom: 10px; }
+        h1 { font-size: 2.5rem; margin-bottom: 30px; }
+        
+        /* Summary Section */
+        .summary-box { background: #f4f4f4; padding: 20px; border-left: 4px solid #8c734b; margin-bottom: 50px; }
+        .summary-box ul { list-style: none; padding: 0; font-size: 0.9rem; color: #555; }
+        
+        /* Readings Section */
+        .section { margin-bottom: 50px; }
+        .section-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: #8c734b; margin-bottom: 5px; }
+        .citation { font-size: 0.9rem; font-style: italic; color: #777; margin-bottom: 15px; }
+        .body-text { font-size: 1.2rem; color: #333; }
     </style>
 </head>
 <body>
     <div class="card">
         <div class="date" id="date"></div>
         <h1 id="title"></h1>
-        <div id="readings"></div>
+        
+        <div class="summary-box" id="summary"></div>
+        <div id="sections"></div>
     </div>
 
     <script src="reading.js"></script>
     <script>
-        document.getElementById('date').innerText = dailyReadings.date;
-        document.getElementById('title').innerText = dailyReadings.title;
-        const container = document.getElementById('readings');
+        document.getElementById('date').innerText = dailyReading.date;
+        document.getElementById('title').innerText = dailyReading.title;
         
-        for (const [key, value] of Object.entries(dailyReadings.reading)) {
-            container.innerHTML += `
+        // Build Summary
+        const summaryDiv = document.getElementById('summary');
+        summaryDiv.innerHTML = "<ul>" + dailyReading.summary.map(s => `<li>${s}</li>`).join('') + "</ul>";
+        
+        // Build Sections
+        const sectionsDiv = document.getElementById('sections');
+        dailyReading.sections.forEach(s => {
+            sectionsDiv.innerHTML += `
                 <div class="section">
-                    <div class="section-title">${key}</div>
-                    <div class="section-text">${value}</div>
+                    <div class="section-title">${s.title}</div>
+                    <div class="citation">${s.citation}</div>
+                    <div class="body-text">${s.body}</div>
                 </div>`;
-        }
+        });
     </script>
 </body>
 </html>

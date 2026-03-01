@@ -5,57 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Mass Readings</title>
     <style>
-        :root { --bg: #f8f7f4; --text: #2d2d2d; --accent: #8c734b; }
+        :root { --bg: #fcfcfc; --text: #1a2a3a; --accent: #8c734b; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; display: flex; justify-content: center; padding: 60px 20px; margin: 0; }
-        .card { width: 100%; max-width: 650px; background: #fff; padding: 60px; border-radius: 4px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
         
-        h1 { font-family: serif; font-size: 2.2rem; margin-bottom: 5px; color: var(--accent); }
-        .date { font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; color: #999; margin-bottom: 40px; }
+        /* The Million-Dollar Card Layout */
+        .card { width: 100%; max-width: 650px; background: #fff; padding: 50px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
         
-        .reading-section { margin-top: 30px; }
-        .reading-section h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #aaa; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .content { font-family: serif; font-size: 1.15rem; line-height: 1.8; color: #333; }
+        /* Premium Typography */
+        h1 { font-family: serif; font-size: 2.2rem; margin-bottom: 25px; color: var(--accent); border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        
+        /* Widget Styling Overrides */
+        .cg_mrc_widget { font-family: inherit !important; line-height: 1.8; color: #444; }
+        .cg_mrc_widget a { color: var(--accent); text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
     <div class="card">
-        <div class="date" id="date">Loading...</div>
-        <h1 id="title">Loading...</h1>
-        <div id="content" class="content">
-            <p>Fetching today's liturgy...</p>
-        </div>
+        <h1>Daily Mass Readings</h1>
+        
+        <div class="cg_mrc_widget"></div>
+        <script src="https://cdn1.catholicgallery.org/wp-content/uploads/widgets/rich-card/cg_mrc_widget.js" async></script>
     </div>
-
-    <script>
-        async function fetchNativeReadings() {
-            const proxy = "https://corsproxy.io/?";
-            const api = "https://litcal.johnromanodorazio.com/api/v5/calendar.php?returntype=JSON";
-            
-            try {
-                const response = await fetch(proxy + encodeURIComponent(api));
-                const data = await response.json();
-                const today = new Date().toISOString().split('T')[0];
-                const day = data.find(item => item.date === today);
-
-                if (day) {
-                    document.getElementById('date').innerText = day.date;
-                    document.getElementById('title').innerText = day.celebration[0].title;
-                    document.getElementById('content').innerHTML = `
-                        <div class="reading-section">
-                            <h2>Liturgical Rank</h2>
-                            <p>${day.celebration[0].rank}</p>
-                        </div>
-                        <div class="reading-section">
-                            <h2>Liturgical Color</h2>
-                            <p>${day.celebration[0].colors.join(', ')}</p>
-                        </div>
-                    `;
-                }
-            } catch (err) {
-                document.getElementById('content').innerHTML = "Cannot connect to server. Check your network or try again later.";
-            }
-        }
-        fetchNativeReadings();
-    </script>
 </body>
 </html>

@@ -3,23 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AmherstLink | Five-College Connection</title>
+    <title>Daily Mass Readings</title>
     <style>
-        :root { --main-color: #800000; --text-color: #333; }
-        body { font-family: -apple-system, system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #fff; color: var(--text-color); }
-        .container { text-align: center; padding: 20px; animation: fadeIn 1.2s ease-in; }
-        h1 { font-size: 3rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; color: var(--main-color); }
-        p { font-size: 1.2rem; color: #666; margin-bottom: 30px; }
-        .btn { background: var(--main-color); color: white; padding: 15px 30px; text-decoration: none; border-radius: 50px; font-weight: 600; transition: transform 0.2s; display: inline-block; }
-        .btn:hover { transform: scale(1.05); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
+        .container { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .reading-section { margin-bottom: 20px; }
+        h2 { color: #34495e; font-size: 1.2rem; margin-bottom: 5px; }
+        #loading { text-align: center; font-style: italic; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>AmherstLink</h1>
-        <p>The social graph for the Five Colleges.<br>One match. No swiping. Just math.</p>
-        <a href="#" class="btn">Enter the Experiment</a>
+        <h1>Daily Mass Readings</h1>
+        <div id="loading">Loading readings for today...</div>
+        <div id="content"></div>
     </div>
+
+    <script>
+        async function fetchReadings() {
+            const contentDiv = document.getElementById('content');
+            const loadingDiv = document.getElementById('loading');
+            try {
+                // Fetches today's readings using a public Catholic API
+                const response = await fetch('https://calapi.inadiutorium.cz/api/v0/en/liturgicalcal/today');
+                const data = await response.json();
+                
+                // Constructing display
+                contentDiv.innerHTML = `
+                    <div class="reading-section">
+                        <h2>Date</h2>
+                        <p>${data.date}</p>
+                    </div>
+                    <div class="reading-section">
+                        <h2>Celebration</h2>
+                        <p>${data.celebrations[0].title}</p>
+                    </div>
+                `;
+                loadingDiv.style.display = 'none';
+            } catch (error) {
+                contentDiv.innerHTML = '<p>Error loading readings. Please check your connection.</p>';
+                loadingDiv.style.display = 'none';
+            }
+        }
+        fetchReadings();
+    </script>
 </body>
 </html>

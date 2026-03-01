@@ -6,49 +6,65 @@
     <title>Daily Mass Readings</title>
     <style>
         :root { --bg: #fcfcfc; --text: #1a2a3a; --accent: #8c734b; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; justify-content: center; padding: 40px 20px; }
-        .card { width: 100%; max-width: 600px; background: #fff; padding: 60px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        h1 { font-family: serif; color: var(--accent); margin-bottom: 20px; }
-        .date { font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; color: #999; margin-bottom: 20px; }
-        #content { font-size: 1.1rem; line-height: 1.8; }
-        .error { color: #d9534f; font-weight: bold; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 60px 20px; display: flex; justify-content: center; }
+        .card { width: 100%; max-width: 600px; background: #fff; padding: 60px; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
+        h1 { font-family: serif; font-size: 2.2rem; margin-bottom: 10px; color: var(--accent); }
+        .date { font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; margin-bottom: 30px; color: #999; }
+        .reading-block { margin-top: 30px; }
+        .reading-block h3 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .content { font-size: 1.05rem; line-height: 1.7; color: #333; }
+        .loading { font-style: italic; color: #888; }
     </style>
 </head>
 <body>
     <div class="card">
-        <div class="date" id="date">Loading...</div>
-        <h1 id="title">Loading...</h1>
-        <div id="content">Fetching today's readings...</div>
+        <div class="date" id="date">Loading Date...</div>
+        <h1 id="title">Loading Readings...</h1>
+        <div class="content" id="content">
+            <p class="loading">Communicating with the liturgical server...</p>
+        </div>
     </div>
 
     <script>
-        async function loadReadings() {
-            // We use a CORS proxy to bypass the security block
-            const proxy = "https://corsproxy.io/?";
-            const api = "https://litcal.johnromanodorazio.com/api/v5/calendar.php?returntype=JSON";
+        async function fetchAutomatedReadings() {
+            const contentDiv = document.getElementById('content');
+            const dateDiv = document.getElementById('date');
+            const titleDiv = document.getElementById('title');
             
+            // This URL bypasses CORS restrictions
+            const proxy = "https://api.allorigins.win/get?url=";
+            const api = "https://litcal.johnromanodorazio.com/api/v5/calendar.php?returntype=JSON";
+
             try {
                 const response = await fetch(proxy + encodeURIComponent(api));
                 const data = await response.json();
+                const jsonContent = JSON.parse(data.contents);
                 
                 const today = new Date().toISOString().split('T')[0];
-                const dayData = data.find(item => item.date === today);
+                const readings = jsonContent.find(item => item.date === today);
 
-                if (dayData) {
-                    document.getElementById('date').innerText = dayData.date;
-                    document.getElementById('title').innerText = dayData.celebration[0].title;
-                    document.getElementById('content').innerHTML = `
-                        <p><strong>Liturgy:</strong> ${dayData.celebration[0].rank}</p>
-                        <p>This is your automated feed for the ${dayData.celebration[0].title}.</p>
+                if (readings) {
+                    dateDiv.innerText = readings.date;
+                    titleDiv.innerText = readings.celebration[0].title;
+                    contentDiv.innerHTML = `
+                        <div class="reading-block">
+                            <h3>Liturgy Rank</h3>
+                            <p>${readings.celebration[0].rank}</p>
+                        </div>
+                        <div class="reading-block">
+                            <h3>Liturgy Color</h3>
+                            <p>${readings.celebration[0].colors.join(', ')}</p>
+                        </div>
                     `;
                 } else {
-                    document.getElementById('content').innerText = "No readings found for today.";
+                    contentDiv.innerText = "Readings for today could not be found.";
                 }
-            } catch (err) {
-                document.getElementById('content').innerHTML = '<p class="error">Unable to connect to the server. Please check back later.</p>';
+            } catch (error) {
+                contentDiv.innerHTML = '<p style="color:red">Failed to connect to the server. Your network may be blocking external APIs.</p>';
+                console.error(error);
             }
         }
-        loadReadings();
+        fetchAutomatedReadings();
     </script>
 </body>
 </html>

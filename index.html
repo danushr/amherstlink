@@ -2,29 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Mass Readings</title>
     <style>
-        :root { --bg: #fcfcfc; --text: #1a2a3a; --accent: #8c734b; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; display: flex; justify-content: center; padding: 60px 20px; margin: 0; }
-        
-        /* The Million-Dollar Card Layout */
-        .card { width: 100%; max-width: 650px; background: #fff; padding: 50px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
-        
-        /* Premium Typography */
-        h1 { font-family: serif; font-size: 2.2rem; margin-bottom: 25px; color: var(--accent); border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        
-        /* Widget Styling Overrides */
-        .cg_mrc_widget { font-family: inherit !important; line-height: 1.8; color: #444; }
-        .cg_mrc_widget a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        body { font-family: 'Inter', sans-serif; background: #f8f7f4; display: flex; justify-content: center; padding: 60px 20px; }
+        .card { width: 100%; max-width: 600px; background: #fff; padding: 60px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 4px; }
+        h1 { color: #8c734b; font-family: serif; font-size: 2rem; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h1>Daily Mass Readings</h1>
-        
-        <div class="cg_mrc_widget"></div>
-        <script src="https://cdn1.catholicgallery.org/wp-content/uploads/widgets/rich-card/cg_mrc_widget.js" async></script>
+        <h1 id="title">Loading...</h1>
+        <div id="content"></div>
     </div>
+    <script>
+        fetch('readings.json')
+            .then(res => res.json())
+            .then(data => {
+                const today = new Date().toISOString().split('T')[0];
+                const day = data.find(item => item.date === today);
+                if (day) {
+                    document.getElementById('title').innerText = day.celebration[0].title;
+                    document.getElementById('content').innerHTML = `<p>${day.celebration[0].rank}</p>`;
+                } else {
+                    document.getElementById('title').innerText = "No reading found for today.";
+                }
+            });
+    </script>
 </body>
 </html>

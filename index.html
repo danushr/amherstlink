@@ -5,63 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Mass Readings</title>
     <style>
-        :root {
-            --bg: #ffffff;
-            --text: #121212;
-            --accent: #2c3e50;
-        }
-        @media (prefers-color-scheme: dark) {
-            :root { --bg: #121212; --text: #e0e0e0; --accent: #bdc3c7; }
-        }
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'Segoe UI', sans-serif; 
-            line-height: 1.6; 
-            padding: 40px 20px; 
-            margin: 0; 
-            display: flex; 
-            justify-content: center; 
-        }
-        .container { max-width: 700px; width: 100%; }
-        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--accent); }
-        .date { font-size: 1.1rem; color: #7f8c8d; margin-bottom: 3rem; }
-        
-        .reading-section { margin-bottom: 4rem; }
-        h2 { font-size: 1.5rem; color: var(--accent); margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; }
-        .citation { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; opacity: 0.8; }
-        .body-text { font-size: 1.35rem; }
+        :root { --bg: #ffffff; --text: #121212; }
+        @media (prefers-color-scheme: dark) { :root { --bg: #121212; --text: #e0e0e0; } }
+        body { background: var(--bg); color: var(--text); font-family: 'Georgia', serif; line-height: 1.8; padding: 40px 20px; margin: 0; display: flex; justify-content: center; }
+        .container { max-width: 650px; width: 100%; }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .date { font-size: 1rem; color: #777; margin-bottom: 3rem; }
+        .section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: #8c734b; margin-top: 40px; }
+        .body-text { font-size: 1.4rem; margin-bottom: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 id="title"></h1>
-        <div class="date" id="date"></div>
-        <div id="readings"></div>
+        <h1>First Sunday of Lent</h1>
+        <div class="date">Sunday, March 1, 2026</div>
+
+        <div class="section-title">First Reading</div>
+        <div class="body-text">Genesis 9:8-15: "See, I am now establishing my covenant with you and your descendants after you..."</div>
+
+        <div class="section-title">Responsorial Psalm</div>
+        <div class="body-text">Psalm 25:4-9: "Your ways, O LORD, make known to me; teach me your paths."</div>
+
+        <div class="section-title">Second Reading</div>
+        <div class="body-text">1 Peter 3:18-22: "Christ suffered for sins once, the righteous for the sake of the unrighteous..."</div>
+
+        <div class="section-title">Gospel</div>
+        <div class="body-text">Mark 1:12-15: "The Spirit drove Jesus out into the desert..."</div>
     </div>
-
-    <script>
-    const script = document.createElement('script');
-    script.src = 'reading.js?t=' + new Date().getTime();
-    document.head.appendChild(script);
-</script>
-
-<script>
-    // Wait for the script to load before displaying content
-    script.onload = () => {
-        document.getElementById('date').innerText = dailyReading.date;
-        document.getElementById('title').innerText = dailyReading.title;
-        const container = document.getElementById('readings');
-        
-        for (const [key, value] of Object.entries(dailyReading.reading)) {
-            container.innerHTML += `
-                <div class="reading-section">
-                    <h2>${key}</h2>
-                    <div class="citation">${value.citation}</div>
-                    <div class="body-text">${value.body}</div>
-                </div>`;
-        }
-    };
-</script>
 </body>
 </html>

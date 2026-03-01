@@ -6,17 +6,18 @@
     <title>Daily Mass Readings</title>
     <style>
         :root { --bg: #fcfcfc; --text: #1a2a3a; --accent: #8c734b; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; display: flex; justify-content: center; padding: 60px 20px; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 60px 20px; display: flex; justify-content: center; }
         
-        /* The Million-Dollar Card */
-        .card { width: 100%; max-width: 600px; background: #fff; padding: 60px; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
+        /* The Card Design */
+        .card { width: 100%; max-width: 600px; background: #fff; padding: 60px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
         
-        /* Typography */
-        h1 { font-family: serif; font-size: 2.2rem; margin-bottom: 30px; color: var(--accent); }
+        /* Professional Typography */
+        h1 { font-family: serif; font-size: 2.2rem; margin-bottom: 30px; color: var(--accent); border-bottom: 1px solid #eee; padding-bottom: 20px; }
         
-        /* Widget Styling (This cleans up the default look) */
-        .cg_mrc_widget { font-family: inherit; }
-        .cg_mrc_widget a { color: var(--accent); text-decoration: none; }
+        /* Widget Styling Override */
+        .cg_mrc_widget { font-family: inherit !important; line-height: 1.8; }
+        .cg_mrc_widget a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .cg_mrc_widget .title { font-size: 1.2rem; margin-bottom: 15px; display: block; }
     </style>
 </head>
 <body>

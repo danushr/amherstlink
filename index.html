@@ -2,52 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Mass Readings</title>
     <style>
-        body { font-family: 'Georgia', serif; background: #fcfcfc; color: #1a1a1a; line-height: 1.8; margin: 0; padding: 60px 20px; }
-        .card { max-width: 600px; margin: 0 auto; }
-        .date { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; color: #999; margin-bottom: 10px; }
-        h1 { font-size: 2.5rem; margin-bottom: 30px; }
+        :root {
+            --bg: #ffffff;
+            --text: #121212;
+            --accent: #2c3e50;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root { --bg: #121212; --text: #e0e0e0; --accent: #bdc3c7; }
+        }
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Segoe UI', sans-serif; 
+            line-height: 1.6; 
+            padding: 40px 20px; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+        }
+        .container { max-width: 700px; width: 100%; }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--accent); }
+        .date { font-size: 1.1rem; color: #7f8c8d; margin-bottom: 3rem; }
         
-        /* Summary Section */
-        .summary-box { background: #f4f4f4; padding: 20px; border-left: 4px solid #8c734b; margin-bottom: 50px; }
-        .summary-box ul { list-style: none; padding: 0; font-size: 0.9rem; color: #555; }
-        
-        /* Readings Section */
-        .section { margin-bottom: 50px; }
-        .section-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: #8c734b; margin-bottom: 5px; }
-        .citation { font-size: 0.9rem; font-style: italic; color: #777; margin-bottom: 15px; }
-        .body-text { font-size: 1.2rem; color: #333; }
+        .reading-section { margin-bottom: 4rem; }
+        h2 { font-size: 1.5rem; color: var(--accent); margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; }
+        .citation { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; opacity: 0.8; }
+        .body-text { font-size: 1.35rem; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="date" id="date"></div>
+    <div class="container">
         <h1 id="title"></h1>
-        
-        <div class="summary-box" id="summary"></div>
-        <div id="sections"></div>
+        <div class="date" id="date"></div>
+        <div id="readings"></div>
     </div>
 
     <script src="reading.js"></script>
     <script>
-        document.getElementById('date').innerText = dailyReading.date;
         document.getElementById('title').innerText = dailyReading.title;
+        document.getElementById('date').innerText = dailyReading.date;
+        const container = document.getElementById('readings');
         
-        // Build Summary
-        const summaryDiv = document.getElementById('summary');
-        summaryDiv.innerHTML = "<ul>" + dailyReading.summary.map(s => `<li>${s}</li>`).join('') + "</ul>";
-        
-        // Build Sections
-        const sectionsDiv = document.getElementById('sections');
-        dailyReading.sections.forEach(s => {
-            sectionsDiv.innerHTML += `
-                <div class="section">
-                    <div class="section-title">${s.title}</div>
-                    <div class="citation">${s.citation}</div>
-                    <div class="body-text">${s.body}</div>
+        for (const [key, value] of Object.entries(dailyReading.reading)) {
+            container.innerHTML += `
+                <div class="reading-section">
+                    <h2>${key}</h2>
+                    <div class="citation">${value.citation}</div>
+                    <div class="body-text">${value.body}</div>
                 </div>`;
-        });
+        }
     </script>
 </body>
 </html>

@@ -3,35 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Readings</title>
+    <title>Daily Mass Readings</title>
     <style>
         :root { --bg: #fcfcfc; --text: #1a2a3a; --accent: #8c734b; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; justify-content: center; padding: 40px 20px; }
         .card { width: 100%; max-width: 600px; background: #fff; padding: 60px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        h1 { font-family: serif; font-size: 2.5rem; margin-bottom: 20px; color: var(--accent); }
-        .date { font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 40px; color: #999; }
-        .content { font-size: 1.1rem; line-height: 1.8; }
-        footer { margin-top: 60px; font-size: 0.75rem; color: #ccc; text-align: center; }
+        h1 { font-family: serif; color: var(--accent); margin-bottom: 20px; }
+        .date { font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; color: #999; margin-bottom: 20px; }
+        #content { font-size: 1.1rem; line-height: 1.8; }
+        .error { color: #d9534f; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="card">
         <div class="date" id="date">Loading...</div>
         <h1 id="title">Loading...</h1>
-        <div class="content" id="content">Loading...</div>
-        <footer>Last updated: <span id="timestamp"></span></footer>
+        <div id="content">Fetching today's readings...</div>
     </div>
 
     <script>
-        const script = document.createElement('script');
-        script.src = 'readings.js?t=' + new Date().getTime(); 
-        script.onload = () => {
-            document.getElementById('date').innerText = dailyReadings.date;
-            document.getElementById('title').innerText = dailyReadings.title;
-            document.getElementById('content').innerText = dailyReadings.content;
-            document.getElementById('timestamp').innerText = new Date().toLocaleDateString();
-        };
-        document.body.appendChild(script);
+        async function loadReadings() {
+            // We use a CORS proxy to bypass the security block
+            const proxy = "https://corsproxy.io/?";
+            const api = "https://litcal.johnromanodorazio.com/api/v5/calendar.php?returntype=JSON";
+            
+            try {
+                const response = await fetch(proxy + encodeURIComponent(api));
+                const data = await response.json();
+                
+                const today = new Date().toISOString().split('T')[0];
+                const dayData = data.find(item => item.date === today);
+
+                if (dayData) {
+                    document.getElementById('date').innerText = dayData.date;
+                    document.getElementById('title').innerText = dayData.celebration[0].title;
+                    document.getElementById('content').innerHTML = `
+                        <p><strong>Liturgy:</strong> ${dayData.celebration[0].rank}</p>
+                        <p>This is your automated feed for the ${dayData.celebration[0].title}.</p>
+                    `;
+                } else {
+                    document.getElementById('content').innerText = "No readings found for today.";
+                }
+            } catch (err) {
+                document.getElementById('content').innerHTML = '<p class="error">Unable to connect to the server. Please check back later.</p>';
+            }
+        }
+        loadReadings();
     </script>
 </body>
 </html>
